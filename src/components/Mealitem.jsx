@@ -1,12 +1,12 @@
 import { Currencyformatter } from "../util/Currencyformatter";
 import Button from "../UI/Button";
 import { useContext } from "react";
-import CartContext from '../store/CartContext'
+import CartContext from "../store/CartContext";
 
 export default function Mealitem({meals}){
-    const cartctx = useContext(CartContext)
+    // const cartctx = useContext(CartContext)
     function handleAddItemCart(){
-        cartctx.addItem(meals);
+    //     cartctx.addItem(meals)
     }
     // console.log("sadasdas",meals.image)
     return <li className="meal-item">

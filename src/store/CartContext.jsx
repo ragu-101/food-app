@@ -1,73 +1,72 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useReducer } from "react";
 
-const CartContext = createContext({
+ const CartContext = createContext({
     items:[],
     addItem:(item)=>{},
-    deleteItem:(id)=>{}
-})
+    removeItem:(id)=>{}
+ });
 
-function cartReduderfunc(state,action){
-    if(action.type === "AddItem"){
-        const existingCartItemIndex = state.items.findIndex((item) => item.id === action.item.id) // it returns the index, if not means it return -1
+function cartReduder(state,action){
+    if(action.type === 'ADD_ITEM'){
+        const existingCartItemIndex = state.items.findIndex((item)=> item.id === action.item.id);
 
         const updatedItems = [...state.items];
 
         if(existingCartItemIndex > -1){
-            const existingItem = state.items[existingCartItemIndex];
+            const existingItem = state.items[existingCartItemIndex] 
 
-
-            const updatedItems = {
+            const updatedItem = {
                 ...existingItem,
-                quantity:existingItem.quantity + 1,
+                quantity:existingItem.quantity + 1
             }
-            updatedItems[existingCartItemIndex] = updatedItems;
+
+            updatedItems[existingCartItemIndex] = updatedItem;
+        }else{
+            updatedItems.push({...action.item,quantity:1})
+        }
+        return {...state,items:updatedItems};
+    }
+    if(action.type === "REMOVE_ITEM"){
+        const existingCartItemIndex = state.items.findIndex((item)=> item.id === action.id);
+
+        const existingCartItem = state.items[existingCartItemIndex];
+        
+        const updatedItems = [...state.items];
+
+        if(existingCartItem.quantity === 1){
+            updatedItems.splice(existingCartItemIndex,1)
         }
         else{
-            updatedItems.push({...action.item,quantity: 1})}
+            const updatedItem = {...existingCartItem,quantity:existingCartItem.quantity - 1};
 
-        return {...state,items:updatedItems}
-    }
-    if(action.type === "DeleteItem"){
-        const existingCartItemIndex = state.items.findIndex((item) => item.id === action.id
-    );
-
-    const existingCartItem = state.items[existingCartItemIndex];
-    
-    const updatedItems = [...state.items]
-
-    if(existingCartItem.quantity === 1){
-
-        updatedItems.splice(existingCartItemIndex,1);
-    }else{
-        const updatedItems = {
-            ...existingCartItem,quantity:existingCartItem.quantity - 1,
+            updatedItems[existingCartItemIndex] = updatedItem;
         }
-        updatedItems[existingCartItemIndex] = updatedItems;
-    }
-    return {...state,items:updatedItems}
+
+        return {...state,items:updatedItems};
     }
 
-    return state; // if the above condition fails then returns a same state
+    return state;
 }
 
 export function CartContextProvider({children}){
-    const [cart,dispatchCartAction] = useReducer(cartReduderfunc,{items:[]})
+   const [cart,dispatchCartAction] = useReducer(cartReduder,{items:[]});
 
-    function addItem(item){
-        dispatchCartAction({type:"AddItem",item}) // if we use to assign same name we can use simply "item"  it refers  item => item : item 
-    }
-    function removeItem(id){
-dispatchCartAction({type:'DeleteItem',id})
-    }
+   function additem(item){
+    dispatchCartAction({type:"ADD_ITEM",item})
+   }
+   function removeItem(id){
+    dispatchCartAction({type:"REMOVE_ITEM",id})
+   }
 
-    const cartContxt ={
-        items:cart.items,
-        addItem, // it refers addItem : addItem
-        deleteItem:removeItem,
-    }
-
-    console.log(CartContext)
-
-    return <CartContext.Provider value={cartContxt}>{children}</CartContext.Provider>
+   const cartContext = {
+    items:cart.items,
+    additem,
+    removeItem
+   }
+console.log(cartContext)
+    return <CartContext.Provider value={cartContext}>
+        {children}
+    </CartContext.Provider>
 }
+
 export default CartContext;

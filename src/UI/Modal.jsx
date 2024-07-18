@@ -4,9 +4,12 @@ export default function Modal({children,open,className=""}) // if the clasname i
 {
     const dialog = useRef();
     useEffect(()=>{
+        const modal = dialog.current;
         if(open){
-            dialog.current.showModal(); // provided by dialog element.
+            modal.showModal(); // provided by dialog element.
         }
+
+        return ()=>modal.close(); // cleanup function not important here but good to use
     },[open])
     return createPortal(<dialog ref={dialog} className={`modal ${className}`}>{children}</dialog>,document.getElementById('modal'))
 }

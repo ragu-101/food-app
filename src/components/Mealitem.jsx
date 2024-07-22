@@ -6,7 +6,7 @@ import CartContext from "../store/CartContext";
 export default function Mealitem({meals}){
     const cartCtx = useContext(CartContext)
     function handleAddItemCart(){
-        cartCtx.additem(meals);
+        cartCtx.addItem(meals);
     }
     // console.log("sadasdas",meals.image)
     return <li className="meal-item">

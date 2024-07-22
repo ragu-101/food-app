@@ -21,7 +21,7 @@ export default function Meals(){
         FetchMeals() 
     },[])
 
-    console.log(loadedmeals)
+    // console.log(loadedmeals)
     return <ul>
         {loadedmeals.map(item => (<Mealitem key={item.id} meals={item} />) )}
     </ul>

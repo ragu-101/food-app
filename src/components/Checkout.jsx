@@ -1,18 +1,58 @@
 import React, { useContext } from 'react'
 import CartContext from '../store/Cartcontext';
+import userProgressContext from '../store/UserProgressContext';
 import Modal from '../UI/Modal';
 import { Currencyformatter } from '../util/Currencyformatter';
 import Input from '../UI/Input';
+import Button from '../UI/Button';
 
 const Checkout = () => {
-    const cartCtx  = useContext(cartCtx);
+    const cartCtx  = useContext(CartContext);
+    const userProgressCtx = useContext(userProgressContext)
     const cartTotal = cartCtx.items.reduce((totalPrice,item)=> totalPrice + item.quantity * item.price,0 )
-  return <Modal>
-    <form>
+
+    function handleCloseCart(){
+      userProgressCtx.hideCheckout();
+    }
+
+    function handleSubmit(event){
+      event.preventDefault();
+
+      const fd = new FormData(event.target);
+      const customerData = Object.fromEntries(fd.entries()) // it returns as an object
+
+
+      fetch('http://localhost:3000/orders',{
+        method:'POST',
+        headers:{
+          'Content-Type' : 'application/json'
+        },
+        body:JSON.stringify({
+          order:{
+            items:cartCtx.items,
+            customer:customerData
+          }
+        })
+      })
+    }
+
+  return <Modal open={userProgressCtx.progress === 'checkout'}  onClose={handleCloseCart}>
+    <form onSubmit={handleSubmit}>
         <h2>Checkout</h2>
         <p>Total Amount : {Currencyformatter.format(cartTotal)}</p>
 
-        <Input label="Full Name" id="full-name" type="text" />
+        <Input label="Full Name" id="name" type="text" />
+        <Input label='E-Mail Address' type="email" id='email'/>
+        <Input label='Street' type="text" id='street'/>
+        <div className='control-row'>
+          <Input label="Postal-Code" type="text" id="postal-code"/>
+          <Input label="City" type="text" id="city"/>
+        </div>
+
+        <p className='modal-actions'>
+          <Button type="button" textOnly onClick={handleCloseCart}>Close</Button>
+          <Button>Submit Order</Button>
+        </p>
     </form>
   </Modal>
 }

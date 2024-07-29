@@ -1,27 +1,25 @@
-import { useState,useEffect } from "react";
+
 import Mealitem from "./Mealitem";
+import useHttp from "../hooks/useHttp";
+import Error from "./Error";
+
+
+const requestConfig = {}
 
 export default function Meals(){
-    const [loadedmeals,setLoadedmeals] = useState([]);
-    
-    useEffect( ()=> {
-         async function FetchMeals(){
-                const response = await fetch('http://localhost:3000/meals') // default type is get.
-                // if(response.ok){
-                //     console.log("fetched")
-                //     console.log(response)
-                // }
-                // else{
-                //     console.log("unable to fetch")
-                // }
-                const meals = await response.json();
-                setLoadedmeals(meals);
-        };
+    const {data:loadedmeals, 
+        isloading,
+        error
+    } = useHttp('http://localhost:3000/meals',requestConfig,[]); // by using {} object inside Meals component it recreated again and again when it renders,this cause infinite loop
 
-        FetchMeals() 
-    },[])
+    if(isloading){
+        return <p className="center"> Fetching data</p>
+    }
 
-    // console.log(loadedmeals)
+    if(error){
+        return <Error title={'Failed to fetch Data'}  message={error}/>
+    }
+   
     return <ul>
         {loadedmeals.map(item => (<Mealitem key={item.id} meals={item} />) )}
     </ul>

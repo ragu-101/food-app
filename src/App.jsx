@@ -3,7 +3,8 @@ import Meals from "./components/Meals";
 // import {CartContextProvider} from './store/CartContext.jsx';
 // import {UserProgressContextProvider} from './store/UserProgressContext.jsx';
 import { CartContextProvider } from "./store/Cartcontext.jsx";
-import { UserProgressContextProvider } from "./store/userprogressContext.jsx";
+// import { UserProgressContextProvider } from "./store/userprogressContext.jsx";
+import { UserProgressContextProvider } from "./store/UserProgressContext.jsx";
 import Cart from "./components/Cart.jsx";
 import Checkout from "./components/Checkout.jsx";
 

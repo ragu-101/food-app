@@ -3,7 +3,8 @@ import Modal from '../UI/Modal';
 import CartContext from '../store/Cartcontext';
 import {Currencyformatter} from '../util/Currencyformatter.js';
 import Button from '../UI/Button';
-import UserProgressContext from '../store/userprogressContext.jsx';
+// import UserProgressContext from '../store/userprogressContext.jsx';
+import userProgressContext from '../store/UserProgressContext.jsx';
 import CartItem from './CartItem.jsx';
 
 const Cart = () => {
